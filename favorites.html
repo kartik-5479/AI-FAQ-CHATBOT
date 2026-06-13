@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorites - JARVIS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-mini">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h2>JARVIS</h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-btn" data-page="chat">
+                    <i class="fas fa-comments"></i>
+                    <span>New Chat</span>
+                </button>
+                <button class="nav-btn" data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>Chat History</span>
+                </button>
+                <button class="nav-btn active" data-page="favorites">
+                    <i class="fas fa-star"></i>
+                    <span>Favorites</span>
+                </button>
+                <button class="nav-btn" data-page="dashboard">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistics</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-icon" id="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content-container">
+            <div class="page-header">
+                <h1>Favorite Conversations</h1>
+                <p>Your bookmarked Q&A</p>
+            </div>
+
+            <div class="favorites-list" id="favoritesList">
+                <div class="empty-state">
+                    <i class="fas fa-star"></i>
+                    <p>No favorites yet</p>
+                    <span>Bookmark important conversations to find them quickly</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/favorites.js') }}"></script>
+</body>
+</html>

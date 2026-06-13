@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS - Intelligent FAQ Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-mini">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h2>JARVIS</h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-page="chat">
+                    <i class="fas fa-comments"></i>
+                    <span>New Chat</span>
+                </button>
+                <button class="nav-btn" data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>Chat History</span>
+                </button>
+                <button class="nav-btn" data-page="favorites">
+                    <i class="fas fa-star"></i>
+                    <span>Favorites</span>
+                </button>
+                <button class="nav-btn" data-page="dashboard">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistics</span>
+                </button>
+                <button class="nav-btn" id="faq-btn">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQs</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn-secondary" id="export-menu-btn">
+                    <i class="fas fa-download"></i>
+                    <span>Export</span>
+                </button>
+                <button class="btn-icon" id="dark-mode-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="header-content">
+                    <div class="robot-status">
+                        <div class="robot-icon">
+                            <svg viewBox="0 0 100 100" width="40" height="40">
+                                <rect x="20" y="30" width="60" height="50" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="35" cy="45" r="5" fill="currentColor" class="robot-eye"/>
+                                <circle cx="65" cy="45" r="5" fill="currentColor" class="robot-eye"/>
+                                <rect x="25" y="60" width="50" height="3" fill="currentColor" opacity="0.5"/>
+                            </svg>
+                        </div>
+                        <div class="header-text">
+                            <h1>JARVIS</h1>
+                            <p class="status"><span class="status-dot"></span> Online</p>
+                        </div>
+                    </div>
+                    <p class="tagline">Your Intelligent FAQ Assistant</p>
+                </div>
+            </header>
+
+            <!-- Chat Messages Area -->
+            <div class="chat-area" id="chatArea">
+                <!-- Welcome Message -->
+                <div class="message-group welcome">
+                    <div class="robot-welcome">
+                        <div class="robot-logo-large">
+                            <svg viewBox="0 0 200 200" width="120" height="120">
+                                <!-- Robot Head -->
+                                <rect x="50" y="40" width="100" height="80" rx="8" fill="none" stroke="#4F46E5" stroke-width="3"/>
+                                <!-- Eyes -->
+                                <g class="robot-eyes">
+                                    <circle cx="75" cy="65" r="8" fill="#06B6D4" class="eye-left"/>
+                                    <circle cx="125" cy="65" r="8" fill="#06B6D4" class="eye-right"/>
+                                </g>
+                                <!-- Mouth -->
+                                <path d="M 70 90 Q 100 105 130 90" stroke="#4F46E5" stroke-width="2" fill="none"/>
+                                <!-- Antenna -->
+                                <line x1="100" y1="40" x2="100" y2="10" stroke="#4F46E5" stroke-width="2"/>
+                                <circle cx="100" cy="5" r="5" fill="#7C3AED"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="welcome-text">
+                        <h2>Welcome to JARVIS</h2>
+                        <p>"Just A Rather Very Intelligent System"</p>
+                        <div class="suggestions">
+                            <h3>Example questions:</h3>
+                            <button class="suggestion-btn">What are the admission requirements?</button>
+                            <button class="suggestion-btn">Tell me about placements</button>
+                            <button class="suggestion-btn">What is the hostel fee?</button>
+                            <button class="suggestion-btn">How do I make biryani?</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="messageInput" 
+                            placeholder="Ask Jarvis anything..." 
+                            autocomplete="off"
+                        >
+                        <div class="input-actions">
+                            <button class="btn-icon" id="voice-btn" title="Voice Input">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                            <button class="btn-icon" id="send-btn" title="Send">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="char-counter" id="charCounter">0 / 1000</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Export Modal -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Export Chat History</h2>
+                <button class="btn-icon close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Choose export format:</p>
+                <div class="export-options">
+                    <button class="export-btn" id="export-pdf">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>PDF</span>
+                    </button>
+                    <button class="export-btn" id="export-txt">
+                        <i class="fas fa-file-alt"></i>
+                        <span>TXT</span>
+                    </button>
+                    <button class="export-btn" id="export-csv">
+                        <i class="fas fa-file-csv"></i>
+                        <span>CSV</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Modal -->
+    <div class="modal" id="faqModal">
+        <div class="modal-content faq-modal">
+            <div class="modal-header">
+                <h2>FAQ Database</h2>
+                <button class="btn-icon close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="faq-filters">
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                    </select>
+                    <input type="text" id="faqSearch" placeholder="Search FAQs...">
+                </div>
+                <div class="faq-list" id="faqList">
+                    <!-- FAQs loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
